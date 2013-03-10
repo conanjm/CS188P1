@@ -82,66 +82,66 @@ def depthFirstSearch(problem):
     #print "Start's successors:", problem.getSuccessors(problem.getStartState())
     """
     "*** YOUR CODE HERE ***"
-
-    closed = set()
-    fringe = util.Stack()
-    path = []
+  
+    closedSet           = set()
+    dataStructure       = util.Stack()
+    path                = []
     
-    #Determines the Start Point
-    node = () 
+    pathTuple = () 
     if "startState" in dir(problem):
-        problemStartState = problem.startState
-        node = ((problemStartState, "", 0), )
+        nodeCoordStartState = problem.startState
+        pathTuple = ((nodeCoordStartState, "", 0), )
     elif "getStartState" in dir(problem):
-        problemStartState = problem.getStartState()
-        node = ((problemStartState, "", 0), )
+        nodeCoordStartState = problem.getStartState()
+        pathTuple = ((nodeCoordStartState, "", 0), )
     else:
-        raise Exception("Unable to get the start point")
-    
-    #Add the Start Point to the Fringe 
-    fringe .push(node)
+        raise Exception("No recognizable function for getting the Start State")
+        
+    dataStructure.push(pathTuple)
 
-    path = findSolution(problem, node, fringe, closed)
+    result = findSolution(problem, pathTuple, dataStructure, closedSet)
     
-    if path is None:
+    if result is None:
         raise Exception("No solution exists!")
 
-    pathList = getListOfActionsFromPath(path)
-    #print "Path: %s with length %d" % (str(pathList), len(pathList)) 
-    return pathList
+    path = getListOfActions(result)
+    #print "[Final Path] [%s] with length %d" % (str(result), len(result))
+    #print "Path: %s with length %d" % (str(path), len(path)) 
+    return path
 
 def breadthFirstSearch(problem):
     """
     Search the shallowest nodes in the search tree first.
     """
     "*** YOUR CODE HERE ***"
-    closed = set()
-    fringe = util.Queue()
-    path = []
+    closedSet           = set()
+    dataStructure       = util.Queue()
+    path                = []
    
-    node = () 
+    pathTuple = () 
     if "startState" in dir(problem):
-        problemStartState = problem.startState
-        node = ((problemStartState, "", 0), )
+        nodeCoordStartState = problem.startState
+        pathTuple = ((nodeCoordStartState, "", 0), )
     elif "getStartState" in dir(problem):
-        problemStartState = problem.getStartState()
-        node = ((problemStartState, "", 0), )
+        nodeCoordStartState = problem.getStartState()
+        pathTuple = ((nodeCoordStartState, "", 0), )
     else:
-        raise Exception("Unable to get the start state")
+        raise Exception("No recognizable function for getting the Start State")
         
-    fringe.push(node)
+    dataStructure.push(pathTuple)
 
-    result = findSolution(problem, node, fringe, closed)
+    result = findSolution(problem, pathTuple, dataStructure, closedSet)
     
     if result is None:
         raise Exception("No solution exists!")
     
-    pathList = getListOfActionsFromPath(result)
+    path = getListOfActions(result)
 
-    #print "Path: %s with length %d" % (str(pathList), len(pathList)) 
-    return pathList
+    #print "[Final Path] [%s] with length %d" % (str(result), len(result))
+    #print "Path: %s with length %d" % (str(path), len(path)) 
+    return path
 
-def getListOfActionsFromPath(path):
+def getListOfActions(path):
     pathList = []
     for arc in path:
         if arc[1] is not "":
@@ -153,30 +153,31 @@ def uniformCostSearch(problem):
     "Search the node of least total cost first. "
     "*** YOUR CODE HERE ***"
     
-    closed = set()
-    fringe = util.PriorityQueueWithFunction(lambda (path): problem.getCostOfActions(getListOfActionsFromPath(path)))
-    path = []
+    closedSet           = set()
+    dataStructure       = util.PriorityQueueWithFunction(lambda (path): problem.getCostOfActions(getListOfActions(path)))
+    path                = []
     
-    node = () 
+    pathTuple = () 
     if "startState" in dir(problem):
-        problemStartState = problem.startState
-        node = ((problemStartState, "", 0), )
+        nodeCoordStartState = problem.startState
+        pathTuple = ((nodeCoordStartState, "", 0), )
     elif "getStartState" in dir(problem):
-        problemStartState = problem.getStartState()
-        node = ((problemStartState, "", 0), )
+        nodeCoordStartState = problem.getStartState()
+        pathTuple = ((nodeCoordStartState, "", 0), )
     else:
-        raise Exception("Unable to get the start state")
+        raise Exception("No recognizable function for getting the Start State")
 
-    fringe.push(node)
+    dataStructure.push(pathTuple)
 
-    result = findSolution(problem, node, fringe, closed)
+    result = findSolution(problem, pathTuple, dataStructure, closedSet)
     
     if result is None:
         raise Exception("No solution exists!")
   
-    path = getListOfActionsFromPath(result)
+    path = getListOfActions(result)
 
-    #print "Path: %s with length %d" % (str(pathList), len(pathList)) 
+    #print "[Final Path] [%s] with length %d" % (str(result), len(result))
+    #print "Path: %s with length %d" % (str(path), len(path)) 
     return path 
 
 def nullHeuristic(state, problem=None):
@@ -192,69 +193,73 @@ def getFn(gN, hN):
     return gN + hN
 
 def getHeuristicFunction(problem, heuristic): 
-    return lambda (path): getFn(problem.getCostOfActions(getListOfActionsFromPath(path)), heuristic(path[-1][0], problem))
+    return lambda (path): getFn(problem.getCostOfActions(getListOfActions(path)), heuristic(path[-1][0], problem))
 
 def aStarSearch(problem, heuristic=nullHeuristic):
-    closed = set()
-    fringe = util.PriorityQueueWithFunction(getHeuristicFunction(problem, heuristic))
-    path = []
+    closedSet           = set()
+    dataStructure       = util.PriorityQueueWithFunction(getHeuristicFunction(problem, heuristic))
+    path                = []
    
-    node = () 
+    pathTuple = () 
     if "startState" in dir(problem):
-        problemStartState = problem.startState
-        node = ((problemStartState, "", 0), )
+        nodeCoordStartState = problem.startState
+        pathTuple = ((nodeCoordStartState, "", 0), )
     elif "getStartState" in dir(problem):
-        problemStartState = problem.getStartState()
-        node = ((problemStartState, "", 0), )
+        nodeCoordStartState = problem.getStartState()
+        pathTuple = ((nodeCoordStartState, "", 0), )
     else:
-        raise Exception("Unable to get the start state")
+        raise Exception("No recognizable function for getting the Start State")
 
-    fringe.push(node)
+    dataStructure.push(pathTuple)
 
-    result = findSolution(problem, node, fringe, closed)
+    result = findSolution(problem, pathTuple, dataStructure, closedSet)
     
     if result is None:
         raise Exception("No solution exists!")
   
-    path = getListOfActionsFromPath(result)
+    path = getListOfActions(result)
 
-    #print "Path: %s with length %d" % (str(pathList), len(pathList)) 
+    #print "[Final Path] [%s] with length %d" % (str(result), len(result))
+    #print "Path: %s with length %d" % (str(path), len(path)) 
     return path 
 
 
-def findSolution(problem=None, startNode=(((0,0), "", 0)), fringe=util.Stack(), closed=None):
+def findSolution(problem=None, startNode=(((0,0), "", 0)), dataStructure=util.Stack(), closedSet=None):
     """
-    This function attempts to find a solution to the pacman maze.  Returns
+    A function that takes a problem and identifies if there is a solution to the pacman maze.  Returns
     a list of arcs if the solution does exist.
     """
-    nodeLocationIndex = 0
-    nodeArcDirectionIndex = 1
-    nodeArcCostIndex = 2
-    problemStateIndex = 3 
+    
+    nodeLocationIndex       = 0
+    nodeArcDirectionIndex   = 1
+    nodeArcCostIndex        = 2
+    problemStateIndex        = 3 
      
     if problem is None:
+        #print "No Problem"
         return None
 
-    if fringe.isEmpty():
+    if dataStructure.isEmpty():
+        #print "[Backtrack] Empty Queue"
         return None   
 
-    while not fringe.isEmpty():
-        destPath = fringe.pop()
+    while not dataStructure.isEmpty():
+        destPath = dataStructure.pop()
         destNode = destPath[-1]
         destNodeCord = destNode[nodeLocationIndex]
         consideredNodeDir = destNode[nodeArcDirectionIndex]
         problemState = None
 
-        if closed is not None and destNodeCord in closed:
+        if closedSet is not None and destNodeCord in closedSet:
             #print "[Visited] (%s)" % str(destNodeCord)
             continue
      
         #print "[Expanding] (%s)" % str(destPath) 
+        
         if problemState is not None and problem.isGoalState(problemState): 
             #print "[Success] Reached Goal State at (%s)" % str(destNodeCord)
             return destPath
         elif problemState is None and problem.isGoalState(destNodeCord):
-            #print "Found Path"
             return destPath
 
         successors = ()
@@ -267,10 +272,10 @@ def findSolution(problem=None, startNode=(((0,0), "", 0)), fringe=util.Stack(), 
         nodesThisLevel = len(successors)
         for node in successors:
             #print "[Child] (%s), [Parent] (%s)" % (str(node), str(destNode))
-            fringe.push(tuple(list(destPath) + [node])) 
+            dataStructure.push(tuple(list(destPath) + [node])) 
 
-        if closed is not None:
-            closed.add(destNodeCord)
+        if closedSet is not None:
+            closedSet.add(destNodeCord)
 
     return None
 
